@@ -1,10 +1,16 @@
 package main.person;
+import java.io.Serializable;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String name;
     private String surname;
     private String email;
     private String phoneNumber;
+
+    public Person(){
+    }
 
     public Person(String name, String surname, String email, String phoneNumber) {
         setName(name);
