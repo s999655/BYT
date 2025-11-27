@@ -1,14 +1,20 @@
 package main.person;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 public abstract class Staff extends Person {
 
+    private static final long serialVersionUID = 1L;
+    
     private int employeeNumber;
     private LocalDate employmentDate;
     private static int vacationDays = 25;
 
-
+    public Staff(){
+        super();
+    }
+    
     public Staff(String name, String surname, String email, String phoneNumber, int employeeNumber, LocalDate employmentDate) {
         super(name, surname, email, phoneNumber);
         setEmployeeNumber(employeeNumber);
@@ -36,6 +42,7 @@ public abstract class Staff extends Person {
         if (employeeNumber <= 0) {
             throw new IllegalArgumentException("Employee number must be positive");
         }
+        this.employeeNumber = employeeNumber;
     }
 
     public void setEmploymentDate( LocalDate employmentDate) {
