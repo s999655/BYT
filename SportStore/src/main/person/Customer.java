@@ -1,4 +1,3 @@
-customer class
 package main.person;
 
 import java.time.LocalDate;
