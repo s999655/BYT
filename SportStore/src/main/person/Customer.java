@@ -1,4 +1,6 @@
 package main.person;
+import main.product.*;
+import main.purchase.Purchase;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

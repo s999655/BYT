@@ -1,4 +1,4 @@
-package main;
+package test;
 
 import main.person.Manager;
 import java.time.LocalDate;

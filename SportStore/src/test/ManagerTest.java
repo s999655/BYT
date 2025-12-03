@@ -1,17 +1,16 @@
-package main.person;
+package test;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
+import main.person.Manager;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
 
 public class ManagerTest{
       private static final String TEST_FILE = "test_managers.xml";
-}
+
 
 @Test  //creating a valid manager
 void constructor_createsManagerAndAddsToExtent() {
@@ -181,4 +180,5 @@ void extentPersistence_saveAndLoadRestoresManagers() {
 
     assertEquals(1, loaded1.getEmployeeNumber());
     assertEquals(2, loaded2.getEmployeeNumber());
+}
 }
