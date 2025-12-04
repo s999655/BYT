@@ -1,13 +1,37 @@
 package main.purchase;
+
 import main.product.Product;
 import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
 
-public class Purchase {
+public class Purchase implements Serializable{
+    private static final long serialVersionUID = 1L;
+
+    private static List<Purchase> extent = new ArrayList<>();
+
+    public static List<Purchase> getExtent() {
+        return Collections.unmodifiableList(extent);
+    }
+
+    private static void addToExtent(Purchase p) {
+        if (p == null) throw new IllegalArgumentException("Purchase cannot be null");
+        extent.add(p);
+    }
+    
     private int transactionID;
     private double finalPrice;
     enum PaymentMethod {CASH , CARD};
     private PaymentMethod paymentMethod;
     private LocalDate purchaseDate;
+
+    public Purchase(){
+    }
     
     //constructor without discount
     public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, Product product){
@@ -15,14 +39,18 @@ public class Purchase {
         setPaymentMethod(paymentMethod);
         setPurchaseDate(purchaseDate);
         finalPrice = product.getPrice();
-    }
 
+        addToExtent(this);
+    }
+    
     //constructor with discount
     public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, Product product, Promotion discount){
         setTransactionID(transactionID);
         setPaymentMethod(paymentMethod);
         setPurchaseDate(purchaseDate);
         finalPrice = product.getPrice()- (product.getPrice()*discount.getDiscountRate());
+
+        addToExtent(this);
     }
 
     public void setTransactionID(int transactionID){
@@ -52,5 +80,24 @@ public class Purchase {
     
     public void applyDiscount(){
 
+    }
+
+    public static void saveExtent(String fileName) {
+        try (XMLEncoder encoder =
+                     new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)))) {
+            encoder.writeObject(extent);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving Purchase extent", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void loadExtent(String fileName) {
+        try (XMLDecoder decoder =
+                     new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)))) {
+            extent = (List<Purchase>) decoder.readObject();
+        } catch (FileNotFoundException e) {
+            extent = new ArrayList<>();
+        }
     }
 }
