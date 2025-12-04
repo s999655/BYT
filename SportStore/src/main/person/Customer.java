@@ -5,9 +5,32 @@ import main.purchase.Purchase;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collections;
 
-public class Customer extends Person {
+public class Customer extends Person implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+
+    public static List<Customer> getExtent() {
+        return Collections.unmodifiableList(extent);
+    }
+
+    private static void addToExtent(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+        extent.add(customer);
+    }
+    
     private String accountNumber;
     private LocalDate registrationDate;
     private String login;
@@ -16,6 +39,11 @@ public class Customer extends Person {
     private int loyaltyPoints;        
     private List<Purchase> purchaseHistory; 
 
+    public Customer() {
+        super();
+        this.purchaseHistory = new ArrayList<>();
+    }
+    
     public Customer(String name, String surname, String email, String phoneNumber,
                     String accountNumber, LocalDate registrationDate,
                     String login, String password, Address address) {
@@ -103,5 +131,24 @@ public void updateLoyaltyPoints(double amountSpent) {
             throw new IllegalArgumentException("Purchase cannot be null");
         }
         purchaseHistory.add(purchase);
+    }
+
+    public static void saveExtent(String fileName) {
+        try (XMLEncoder encoder =
+                     new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)))) {
+            encoder.writeObject(extent);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving Customer extent to XML", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void loadExtent(String fileName) {
+        try (XMLDecoder decoder =
+                     new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)))) {
+            extent = (List<Customer>) decoder.readObject();
+        } catch (FileNotFoundException e) {
+            extent = new ArrayList<>();
+        }
     }
 }
