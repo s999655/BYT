@@ -1,6 +1,6 @@
 package test;
 
-import main.purchase.Purchase;
+import main.purchase.*;
 import main.product.Product;
 import org.junit.jupiter.api.Test;
 

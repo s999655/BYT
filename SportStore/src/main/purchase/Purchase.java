@@ -26,12 +26,10 @@ public class Purchase implements Serializable{
     
     private int transactionID;
     private double finalPrice;
-    enum PaymentMethod {CASH , CARD};
+    public enum PaymentMethod {CASH , CARD};
     private PaymentMethod paymentMethod;
     private LocalDate purchaseDate;
 
-    public Purchase(){
-    }
     
     //constructor without discount
     public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, Product product){
@@ -78,8 +76,8 @@ public class Purchase implements Serializable{
     }
 
     
-    public void applyDiscount(){
-
+    public void applyDiscount(Promotion discount){
+        this.finalPrice = finalPrice - (finalPrice * discount.getDiscountRate()); 
     }
 
     public static void saveExtent(String fileName) {
@@ -100,4 +98,22 @@ public class Purchase implements Serializable{
             extent = new ArrayList<>();
         }
     }
+
+    //getters
+    public int getTransactionID(){
+        return transactionID;
+    }
+
+    public double getFinalPrice(){
+        return finalPrice;
+    }
+
+    public PaymentMethod getPaymentMethod(){
+        return paymentMethod;
+    }
+
+    public LocalDate getPurchaseDate(){
+        return purchaseDate;
+    }
+
 }

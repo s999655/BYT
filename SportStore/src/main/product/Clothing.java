@@ -29,9 +29,9 @@ public class Clothing extends Product implements Serializable{
         extent.add(clothing);
     }
     
-    enum Size{XS,S,M,L,XL,XXL};
+    public enum Size{XS,S,M,L,XL,XXL};
     String[] material;
-    enum Category{men, women, kids, unisex};
+    public enum Category{men, women, kids, unisex};
     Category category;
     Size size;
 
@@ -69,6 +69,17 @@ public class Clothing extends Product implements Serializable{
     }
 
     //getters
+    public String[] getMaterial(){
+        return material;
+    }
+
+    public Size getSize(){
+        return size;
+    }
+    
+    public Category getCategory(){
+        return category;
+    }
 
 
 
