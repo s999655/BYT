@@ -1,17 +1,50 @@
 package main.product;
 
-public class Clothing extends Product{
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Clothing extends Product implements Serializable{
+    private static final long serialVersionUID = 1L;
+
+    private static List<Clothing> extent = new ArrayList<>();
+
+    public static List<Clothing> getExtent() {
+        return Collections.unmodifiableList(extent);
+    }
+
+    private static void addToExtent(Clothing clothing) {
+        if (clothing == null) {
+            throw new IllegalArgumentException("Clothing instance cannot be null");
+        }
+        extent.add(clothing);
+    }
+    
     enum Size{XS,S,M,L,XL,XXL};
     String[] material;
     enum Category{men, women, kids, unisex};
     Category category;
     Size size;
 
+    public Clothing(){
+    }
+    
     public Clothing(int productID, String name, double price, int stockQuantity, String model, String color, double minPrice, String location, String[] material, Size size, Category category){
         super(productID, name, price,  stockQuantity, model, color, minPrice, location);
         setSize(size);
         setMaterial(material);
         setCategory(category);
+
+        addToExtent(this);
     }
 
     public void setMaterial(String[] material){
@@ -36,5 +69,25 @@ public class Clothing extends Product{
     }
 
     //getters
-    
+
+
+
+    public static void saveExtent(String fileName) {
+        try (XMLEncoder encoder =
+                     new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)))) {
+            encoder.writeObject(extent);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving Clothing extent", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void loadExtent(String fileName) {
+        try (XMLDecoder decoder =
+                     new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)))) {
+            extent = (List<Clothing>) decoder.readObject();
+        } catch (FileNotFoundException e) {
+            extent = new ArrayList<>();
+        }
+    }
 }
