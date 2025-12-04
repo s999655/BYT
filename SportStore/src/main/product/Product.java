@@ -1,6 +1,35 @@
 package main.product;
 
-public class Product {
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Product implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
+    private static List<Product> extent = new ArrayList<>();
+
+    public static List<Product> getExtent() {
+        return Collections.unmodifiableList(extent);
+    }
+
+    private static void addToExtent(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        extent.add(product);
+    }
+    
     private int productID;
     private String name;
     private double price;
@@ -10,6 +39,8 @@ public class Product {
     private double minPrice;
     private String location;
 
+    public Product(){
+    }
     
     public Product(int productID, String name, double price, int stockQuantity, String model, String color, double minPrice, String location){
         setProductID(productID);
@@ -109,5 +140,22 @@ public class Product {
 
     }
 
+    public static void saveExtent(String fileName) {
+        try (XMLEncoder encoder =
+                     new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)))) {
+            encoder.writeObject(extent);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving Product extent to XML", e);
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    public static void loadExtent(String fileName) {
+        try (XMLDecoder decoder =
+                     new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)))) {
+            extent = (List<Product>) decoder.readObject();
+        } catch (FileNotFoundException e) {
+            extent = new ArrayList<>();
+        }
+    }
 }
