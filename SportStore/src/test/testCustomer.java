@@ -1,7 +1,9 @@
 package test;
 
 import main.person.Customer;
+import main.person.Address;
 import main.purchase.Purchase;
+import main.product.Product;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -9,39 +11,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class testCustomer {
+public class testCustomer {
 
     private static final String TEST_FILE = "test_customers.xml";
 
-   
-    static class Address {
-        String street = "Street 1";
-        String city = "City";
-        String zip = "12345";
-        public Address() {}
-    }
-
-    
-    static class DummyPurchase extends Purchase {
-        public DummyPurchase() {
-            super();
-        }
-    }
-
     @Test
     void constructor_createsCustomerCorrectly() {
-        Address addr = new Address();
+        Address addr = new Address("Street 1", 123, 45, "Gotham");
         LocalDate regDate = LocalDate.of(2020, 1, 1);
 
         Customer c = new Customer(
                 "Alice", "Smith", "alice@example.com", "+48123456789",
-                "ACC123", regDate, "aliceLogin", "password123", addr
-        );
+                "ACC123", regDate, addr);
 
         assertEquals("ACC123", c.getAccountNumber());
         assertEquals(regDate, c.getRegistrationDate());
-        assertEquals("aliceLogin", c.getLogin());
-        assertEquals("password123", c.getPassword());
         assertEquals(addr, c.getAddress());
         assertEquals(0, c.getLoyaltyPoints());
         assertTrue(c.getPurchaseHistory().isEmpty());
@@ -58,19 +42,6 @@ class testCustomer {
     void setRegistrationDate_futureDate_throwsException() {
         Customer c = new Customer();
         assertThrows(IllegalArgumentException.class, () -> c.setRegistrationDate(LocalDate.now().plusDays(1)));
-    }
-
-    @Test
-    void setLogin_nullOrEmpty_throwsException() {
-        Customer c = new Customer();
-        assertThrows(IllegalArgumentException.class, () -> c.setLogin(null));
-        assertThrows(IllegalArgumentException.class, () -> c.setLogin(""));
-    }
-
-    @Test
-    void setPassword_tooShort_throwsException() {
-        Customer c = new Customer();
-        assertThrows(IllegalArgumentException.class, () -> c.setPassword("123"));
     }
 
     @Test
@@ -99,8 +70,10 @@ class testCustomer {
     @Test
     void addPurchase_and_viewPurchaseHistory_works() {
         Customer c = new Customer();
-        Purchase p1 = new DummyPurchase();
-        Purchase p2 = new DummyPurchase();
+        Product product1 = new Product(1, "Football shirt", 29.99, 100, "ModelX", "White", 19.99, "Aisle 3");
+        Product product2 = new Product(2, "Basketball cap", 49.99, 50, "ModelY", "Black", 39.99, "Aisle 4");
+        Purchase p1 = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), product1);
+        Purchase p2 = new Purchase(2, Purchase.PaymentMethod.CASH, LocalDate.now(), product2);
 
         c.addPurchase(p1);
         c.addPurchase(p2);
@@ -119,8 +92,8 @@ class testCustomer {
 
         Customer.loadExtent("non_existing_file.xml");
 
-        Customer c1 = new Customer("A", "B", "a@b.com", "+123456789", "ACC1", LocalDate.of(2020,1,1), "login1", "pass123", new Address());
-        Customer c2 = new Customer("C", "D", "c@d.com", "+987654321", "ACC2", LocalDate.of(2021,1,1), "login2", "pass456", new Address());
+        Customer c1 = new Customer("A", "B", "a@b.com", "+123456789", "ACC1", LocalDate.of(2020,1,1), new Address());
+        Customer c2 = new Customer("C", "D", "c@d.com", "+987654321", "ACC2", LocalDate.of(2021,1,1), new Address());
 
         Customer.saveExtent(TEST_FILE);
 
