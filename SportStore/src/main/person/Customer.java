@@ -37,11 +37,10 @@ public class Customer extends Person {
     private int loyaltyPoints;        
     private List<Purchase> purchaseHistory; 
 
+    // Constructors
     public Customer() {
-        super();
-        this.purchaseHistory = new ArrayList<>();
     }
-    
+
     public Customer(String name, String surname, String email, String phoneNumber,
                     String accountNumber, LocalDate registrationDate, Address address) {
 
@@ -53,6 +52,8 @@ public class Customer extends Person {
 
         this.loyaltyPoints = 0;   
         this.purchaseHistory = new ArrayList<>();
+
+        addToExtent(this);
     }
 
     // Getters

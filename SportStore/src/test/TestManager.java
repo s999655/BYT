@@ -5,11 +5,32 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class ManagerTest{
+public class TestManager{
       private static final String TEST_FILE = "test_managers.xml";
+
+
+    @BeforeEach
+    @AfterEach 
+    void cleanup() {
+        try {
+            java.lang.reflect.Field field = Manager.class.getDeclaredField("extent");
+            field.setAccessible(true);
+            ((List<?>) field.get(null)).clear();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to clear manager extent for test", e);
+        }
+
+        File file = new File(TEST_FILE);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 
 
 @Test  //creating a valid manager

@@ -1,15 +1,28 @@
 package test;
 
 import main.product.Clothing;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class testClothing {
+public class TestClothing {
 
     private static final String TEST_FILE = "test_clothing.xml";
+
+    @BeforeEach
+    @AfterEach 
+    void cleanup() {
+        File file = new File(TEST_FILE);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
 
     @Test
     void constructor_createsClothingAndAddsToExtent() {

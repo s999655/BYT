@@ -8,12 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Clothing extends Product implements Serializable{
+public class Clothing extends Product {
     private static final long serialVersionUID = 1L;
 
     private static List<Clothing> extent = new ArrayList<>();
@@ -34,7 +33,8 @@ public class Clothing extends Product implements Serializable{
     public enum Category{men, women, kids, unisex};
     Category category;
     Size size;
-
+    
+    //Constructors
     public Clothing(){
     }
     
@@ -47,6 +47,7 @@ public class Clothing extends Product implements Serializable{
         addToExtent(this);
     }
 
+    // Setters
     public void setMaterial(String[] material){
         if(material.length == 0){
             throw new IllegalArgumentException("material cannot be empty");

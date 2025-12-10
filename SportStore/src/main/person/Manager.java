@@ -6,9 +6,8 @@ import java.util.List;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
-import java.util.*;
 
-public class Manager extends Staff implements Serializable{
+public class Manager extends Staff {
 
     private static final long serialVersionUID = 1L;
     
@@ -47,7 +46,7 @@ public class Manager extends Staff implements Serializable{
     }
     
     public void setPromotionDate(LocalDate promotionDate){
-        if (promotionDate.isBefore(getEmploymentDate())) {
+        if (promotionDate != null && promotionDate.isBefore(getEmploymentDate())) {
             throw new IllegalArgumentException("Promotion date cannot be before employment date");
         }
         this.promotionDate = promotionDate;

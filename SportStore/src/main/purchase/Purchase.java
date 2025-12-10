@@ -15,6 +15,9 @@ public class Purchase implements Serializable{
 
     private static List<Purchase> extent = new ArrayList<>();
 
+    public Purchase() {
+    }
+
     public static List<Purchase> getExtent() {
         return Collections.unmodifiableList(extent);
     }
@@ -69,7 +72,7 @@ public class Purchase implements Serializable{
         if(purchaseDate == null){
             throw new IllegalArgumentException("purchaseDate cannot be null");
         }
-        if(purchaseDate.isBefore(LocalDate.now())){
+        if(purchaseDate.isAfter(LocalDate.now())){
             throw new IllegalArgumentException("purchaseDate cannot be in the future");
         }
         this.purchaseDate = purchaseDate;

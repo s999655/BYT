@@ -1,6 +1,5 @@
 package main.person;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 public abstract class Staff extends Person {

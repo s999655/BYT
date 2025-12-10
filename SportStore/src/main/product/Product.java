@@ -1,5 +1,6 @@
 package main.product;
-
+import java.io.Serializable;
+/* 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -8,16 +9,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.List;*/
 
-public class Product implements Serializable{
+public abstract class Product implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    private static List<Product> extent = new ArrayList<>();
+/*    private static List<Product> extent = new ArrayList<>();
 
     public static List<Product> getExtent() {
         return Collections.unmodifiableList(extent);
@@ -29,7 +30,7 @@ public class Product implements Serializable{
         }
         extent.add(product);
     }
-    
+    */
     private int productID;
     private String name;
     private double price;
@@ -139,7 +140,7 @@ public class Product implements Serializable{
         this.location = location;
 
     }
-
+/*
     public static void saveExtent(String fileName) {
         try (XMLEncoder encoder =
                      new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)))) {
@@ -147,8 +148,8 @@ public class Product implements Serializable{
         } catch (IOException e) {
             throw new RuntimeException("Error saving Product extent to XML", e);
         }
-    }
-
+    }*/
+/*
     @SuppressWarnings("unchecked")
     public static void loadExtent(String fileName) {
         try (XMLDecoder decoder =
@@ -157,5 +158,5 @@ public class Product implements Serializable{
         } catch (FileNotFoundException e) {
             extent = new ArrayList<>();
         }
-    }
+    }*/
 }
