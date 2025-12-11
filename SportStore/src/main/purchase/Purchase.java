@@ -56,7 +56,7 @@ public class Purchase implements Serializable{
         for (Product product : products) {
             finalPrice += product.getPrice();
         }
-        finalPrice -= (finalPrice * discount.getDiscountRate());
+        finalPrice -= (finalPrice * promotion.getDiscountRate());
 
         addToExtent(this);
     }
@@ -87,7 +87,7 @@ public class Purchase implements Serializable{
 
     
     public void applyDiscount(Promotion discount){
-        this.finalPrice = finalPrice - (finalPrice * discount.getDiscountRate()); 
+        this.finalPrice = finalPrice - (finalPrice * promotion.getDiscountRate()); 
     }
 
     public static void saveExtent(String fileName) {
