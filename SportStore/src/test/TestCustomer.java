@@ -1,7 +1,6 @@
 package test;
 
 import main.person.Customer;
-import main.person.Manager;
 import main.person.Address;
 import main.purchase.Purchase;
 import main.product.Clothing;
@@ -89,8 +88,8 @@ public class TestCustomer {
         String[] material2 = {"Polyester"};
         Clothing product1 = new Clothing(1, "Football shirt", 29.99, 100, "ModelX", "White", 19.99, "Aisle 3", material1, Clothing.Size.M, Clothing.Category.men);
         Clothing product2 = new Clothing(2, "Basketball cap", 49.99, 50, "ModelY", "Black", 39.99, "Aisle 4", material2, Clothing.Size.L, Clothing.Category.unisex);
-        Purchase p1 = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), product1);
-        Purchase p2 = new Purchase(2, Purchase.PaymentMethod.CASH, LocalDate.now(), product2);
+        Purchase p1 = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), java.util.Arrays.asList(product1));
+        Purchase p2 = new Purchase(2, Purchase.PaymentMethod.CASH, LocalDate.now(), java.util.Arrays.asList(product2));
 
         c.addPurchase(p1);
         c.addPurchase(p2);

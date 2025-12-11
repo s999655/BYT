@@ -35,21 +35,28 @@ public class Purchase implements Serializable{
 
     
     //constructor without discount
-    public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, Product product){
+    public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, List<Product> products){
         setTransactionID(transactionID);
         setPaymentMethod(paymentMethod);
         setPurchaseDate(purchaseDate);
-        finalPrice = product.getPrice();
+        finalPrice = 0;
+        for (Product product : products) {
+            finalPrice += product.getPrice();
+        }
 
         addToExtent(this);
     }
     
     //constructor with discount
-    public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, Product product, Promotion discount){
+    public Purchase(int transactionID, PaymentMethod paymentMethod, LocalDate purchaseDate, List<Product> products, Promotion discount){
         setTransactionID(transactionID);
         setPaymentMethod(paymentMethod);
         setPurchaseDate(purchaseDate);
-        finalPrice = product.getPrice()- (product.getPrice()*discount.getDiscountRate());
+        finalPrice = 0;
+        for (Product product : products) {
+            finalPrice += product.getPrice();
+        }
+        finalPrice -= (finalPrice * discount.getDiscountRate());
 
         addToExtent(this);
     }
@@ -102,7 +109,7 @@ public class Purchase implements Serializable{
         }
     }
 
-    //getters
+    // Getters
     public int getTransactionID(){
         return transactionID;
     }
