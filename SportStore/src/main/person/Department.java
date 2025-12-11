@@ -1,4 +1,4 @@
-package main.person
+package main.person;
 
 public class Department {
   
