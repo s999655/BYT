@@ -1,6 +1,7 @@
 package test;
 
 import main.purchase.*;
+import main.product.Brand;
 import main.product.Clothing;
 
 import org.junit.jupiter.api.AfterEach;
@@ -28,7 +29,7 @@ class TestPurchase {
 
     @Test
     void constructorWithoutDiscount_createsPurchaseCorrectly() {
-        Clothing product1 = new Clothing(1, "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
         Purchase p = new Purchase(1, Purchase.PaymentMethod.CASH, LocalDate.now(), java.util.Arrays.asList(product1));
 
         assertEquals(1, p.getTransactionID());
@@ -39,7 +40,7 @@ class TestPurchase {
 
     @Test
     void constructorWithDiscount_createsPurchaseCorrectly() {
-        Clothing product1 = new Clothing(1, "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
         Promotion promo = new Promotion("Winter Sale", LocalDate.now(), LocalDate.now().plusDays(10), 0.1f); // 10% discount
 
         Purchase p = new Purchase(2, Purchase.PaymentMethod.CARD, LocalDate.now(), java.util.Arrays.asList(product1), promo);
@@ -50,7 +51,7 @@ class TestPurchase {
 
     @Test
     void setTransactionID_invalid_throwsException() {
-        Clothing product1 = new Clothing(1, "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
         Purchase p = new Purchase(1, Purchase.PaymentMethod.CASH, LocalDate.now(), java.util.Arrays.asList(product1));
 
         Exception e = assertThrows(IllegalArgumentException.class, () -> p.setTransactionID(0));
@@ -59,7 +60,7 @@ class TestPurchase {
 
     @Test
     void setPaymentMethod_null_throwsException() {
-        Clothing product1 = new Clothing(1, "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
         Purchase p = new Purchase(1, Purchase.PaymentMethod.CASH, LocalDate.now(), java.util.Arrays.asList(product1));
 
         Exception e = assertThrows(IllegalArgumentException.class, () -> p.setPaymentMethod(null));
@@ -68,7 +69,7 @@ class TestPurchase {
 
     @Test
     void setPurchaseDate_nullOrFuture_throwsException() {
-        Clothing product1 = new Clothing(1, "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
         Purchase p = new Purchase(1, Purchase.PaymentMethod.CASH, LocalDate.now(), java.util.Arrays.asList(product1));
 
         assertThrows(IllegalArgumentException.class, () -> p.setPurchaseDate(null));
@@ -77,8 +78,8 @@ class TestPurchase {
 
     @Test
     void extentPersistence_saveAndLoadRestoresPurchases() {
-        Clothing product1 = new Clothing(1, "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
-        Clothing product2 = new Clothing(2, "Jeans", 80.0, 15, "ModelY", "Blue", 80.0, "B2", new String[]{"Denim"}, Clothing.Size.L, Clothing.Category.men);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Sweater", 100.0, 10, "ModelX", "Red", 100.0, "A1", new String[]{"Cashmere"}, Clothing.Size.M, Clothing.Category.women);
+        Clothing product2 = new Clothing(2, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Jeans", 80.0, 15, "ModelY", "Blue", 80.0, "B2", new String[]{"Denim"}, Clothing.Size.L, Clothing.Category.men);
 
        
         Purchase.loadExtent("non_existing_file.xml");

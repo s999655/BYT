@@ -39,11 +39,16 @@ public abstract class Product implements Serializable{
     private String color;
     private double minPrice;
     private String location;
+    private Brand brand;
 
     public Product(){
     }
     
-    public Product(int productID, String name, double price, int stockQuantity, String model, String color, double minPrice, String location){
+    public Product(int productID,Brand brand,String name, double price, int stockQuantity, String model, String color, double minPrice, String location){
+        if (brand == null) {
+            throw new IllegalArgumentException("Product cannot exist without a Brand.");
+        }
+        this.brand = brand;
         setProductID(productID);
         setName(name);
         setPrice(price);
@@ -52,6 +57,8 @@ public abstract class Product implements Serializable{
         setColor(color);
         setMinPrice(minPrice);
         setLocation(location);
+
+        this.brand.addProduct(this);
     }
 
 

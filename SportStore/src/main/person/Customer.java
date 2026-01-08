@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 
 public class Customer extends Person {
 
@@ -35,7 +36,7 @@ public class Customer extends Person {
     private LocalDate registrationDate;
     private Address address;           
     private int loyaltyPoints;        
-    private List<Purchase> purchaseHistory; 
+    private HashSet<Purchase> purchaseHistory; 
 
     // Constructors
     public Customer() {
@@ -51,7 +52,7 @@ public class Customer extends Person {
         setAddress(address);
 
         this.loyaltyPoints = 0;   
-        this.purchaseHistory = new ArrayList<>();
+        this.purchaseHistory = new HashSet<>();
 
         addToExtent(this);
     }
@@ -61,7 +62,7 @@ public class Customer extends Person {
     public LocalDate getRegistrationDate() { return registrationDate; }
     public Address getAddress() { return address; }
     public int getLoyaltyPoints() { return loyaltyPoints; }
-    public List<Purchase> getPurchaseHistory() { return new ArrayList<>(purchaseHistory); }
+    public HashSet<Purchase> getPurchaseHistory() { return new HashSet<>(purchaseHistory); }
 
     //Setters
     public void setAccountNumber(String accountNumber) {
@@ -101,16 +102,36 @@ public class Customer extends Person {
     }
 
  
-    public List<Purchase> viewPurchaseHistory() {
-        return new ArrayList<>(purchaseHistory);
+    public HashSet<Purchase> viewPurchaseHistory() {
+        return new HashSet<>(purchaseHistory);
     }
 
-  
+    // Association methods
     public void addPurchase(Purchase purchase) {
         if (purchase == null) {
             throw new IllegalArgumentException("Purchase cannot be null");
         }
-        purchaseHistory.add(purchase);
+
+        if (this.purchaseHistory.contains(purchase)) {
+            return;
+        }
+
+        this.purchaseHistory.add(purchase);
+        purchase.addCustomer(this);
+    }
+
+    
+    public void removePurchase(Purchase purchase) {
+        if (purchase == null) {
+            throw new IllegalArgumentException("Purchase cannot be null");
+        }
+
+        if (!this.purchaseHistory.contains(purchase)) {
+            return;
+        }
+
+        this.purchaseHistory.remove(purchase);
+        purchase.removeCustomer(this);
     }
 
     public static void saveExtent(String fileName) {

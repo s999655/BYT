@@ -1,8 +1,8 @@
 package main.purchase;
 
+import main.person.Customer;
 import main.product.Product;
 import java.time.LocalDate;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +32,7 @@ public class Purchase implements Serializable{
     public enum PaymentMethod {CASH , CARD};
     private PaymentMethod paymentMethod;
     private LocalDate purchaseDate;
+    private Customer customer;
 
     
     //constructor without discount
@@ -85,7 +86,32 @@ public class Purchase implements Serializable{
         this.purchaseDate = purchaseDate;
     }
 
+    // association methods
+    public void addCustomer(Customer customer) {
+
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+
+        if (this.customer == customer) {
+            return;
+        }
+
+        this.customer = customer;
+        customer.addPurchase(this);
+    }
     
+    public void removeCustomer(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+        if (this.customer != customer) {
+            return;
+        }
+        this.customer = null;
+        customer.removePurchase(this);
+    }
+
     public void applyDiscount(Promotion discount){
         this.finalPrice = finalPrice - (finalPrice * discount.getDiscountRate()); 
     }
@@ -124,6 +150,10 @@ public class Purchase implements Serializable{
 
     public LocalDate getPurchaseDate(){
         return purchaseDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
 }

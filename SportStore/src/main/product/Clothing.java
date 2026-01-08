@@ -38,8 +38,8 @@ public class Clothing extends Product {
     public Clothing(){
     }
     
-    public Clothing(int productID, String name, double price, int stockQuantity, String model, String color, double minPrice, String location, String[] material, Size size, Category category){
-        super(productID, name, price,  stockQuantity, model, color, minPrice, location);
+    public Clothing(int productID, Brand brand, String name, double price, int stockQuantity, String model, String color, double minPrice, String location, String[] material, Size size, Category category){
+        super(productID, brand, name, price,  stockQuantity, model, color, minPrice, location);
         setSize(size);
         setMaterial(material);
         setCategory(category);

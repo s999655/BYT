@@ -3,6 +3,7 @@ package test;
 import main.person.Customer;
 import main.person.Address;
 import main.purchase.Purchase;
+import main.product.Brand;
 import main.product.Clothing;
 
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -86,15 +88,15 @@ public class TestCustomer {
                 "ACC999", LocalDate.of(2021, 5, 15), new Address("Street 1", 123, 45, "Gotham"));
         String[] material1 = {"Cotton"};
         String[] material2 = {"Polyester"};
-        Clothing product1 = new Clothing(1, "Football shirt", 29.99, 100, "ModelX", "White", 19.99, "Aisle 3", material1, Clothing.Size.M, Clothing.Category.men);
-        Clothing product2 = new Clothing(2, "Basketball cap", 49.99, 50, "ModelY", "Black", 39.99, "Aisle 4", material2, Clothing.Size.L, Clothing.Category.unisex);
+        Clothing product1 = new Clothing(1, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Football shirt", 29.99, 100, "ModelX", "White", 19.99, "Aisle 3", material1, Clothing.Size.M, Clothing.Category.men);
+        Clothing product2 = new Clothing(2, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Basketball cap", 49.99, 50, "ModelY", "Black", 39.99, "Aisle 4", material2, Clothing.Size.L, Clothing.Category.unisex);
         Purchase p1 = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), java.util.Arrays.asList(product1));
         Purchase p2 = new Purchase(2, Purchase.PaymentMethod.CASH, LocalDate.now(), java.util.Arrays.asList(product2));
 
         c.addPurchase(p1);
         c.addPurchase(p2);
 
-        List<Purchase> history = c.viewPurchaseHistory();
+        HashSet<Purchase> history = c.viewPurchaseHistory();
         assertEquals(2, history.size());
         assertTrue(history.contains(p1));
         assertTrue(history.contains(p2));
