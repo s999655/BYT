@@ -1,36 +1,14 @@
 package main.product;
 import java.io.Serializable;
-/* 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;*/
+import java.util.List;
 
 public abstract class Product implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-/*    private static List<Product> extent = new ArrayList<>();
-
-    public static List<Product> getExtent() {
-        return Collections.unmodifiableList(extent);
-    }
-
-    private static void addToExtent(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
-        extent.add(product);
-    }
-    */
     private int productID;
     private String name;
     private double price;
@@ -147,23 +125,44 @@ public abstract class Product implements Serializable{
         this.location = location;
 
     }
-/*
-    public static void saveExtent(String fileName) {
-        try (XMLEncoder encoder =
-                     new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)))) {
-            encoder.writeObject(extent);
-        } catch (IOException e) {
-            throw new RuntimeException("Error saving Product extent to XML", e);
+
+    //this product may CONTAIN other products
+    private final List<Product> contains = new ArrayList<>();
+
+    //this product may be CONTAINED IN other products
+    private final List<Product> containedIn = new ArrayList<>();
+
+    public List<Product> getContains() {
+        return Collections.unmodifiableList(contains);
+    }
+
+    public List<Product> getContainedIn() {
+        return Collections.unmodifiableList(containedIn);
+    }
+
+    public void addContainedProduct(Product component) {
+        if (component == null) {
+            throw new IllegalArgumentException("Contained product cannot be null");
         }
-    }*/
-/*
-    @SuppressWarnings("unchecked")
-    public static void loadExtent(String fileName) {
-        try (XMLDecoder decoder =
-                     new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)))) {
-            extent = (List<Product>) decoder.readObject();
-        } catch (FileNotFoundException e) {
-            extent = new ArrayList<>();
+        if (component == this) {
+            throw new IllegalArgumentException("A product cannot contain itself");
         }
-    }*/
+        if (contains.contains(component)) {
+            return; //already linked
+        }
+
+        contains.add(component);
+
+        if (!component.containedIn.contains(this)) {
+            component.containedIn.add(this);
+        }
+    }
+
+    public void removeContainedProduct(Product component) {
+        if (component == null) return;
+
+        if (contains.remove(component)) {
+            component.containedIn.remove(this);
+        }
+    }
 }
