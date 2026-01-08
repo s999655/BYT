@@ -124,3 +124,61 @@ public class TestCustomer {
         assertEquals("ACC2", extent.get(1).getAccountNumber());
     }
 }
+    @Test
+    void addPurchase_setsCustomerInPurchase() {
+        Customer c = new Customer("A", "B", "a@b.com", "123",
+                "ACC1", LocalDate.now(), new Address());
+        Purchase p = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), List.of());
+
+        c.addPurchase(p);
+
+        assertEquals(c, p.getCustomer());
+    }
+
+    @Test
+    void addCustomer_addsPurchaseToCustomerHistory() {
+        Customer c = new Customer("A", "B", "a@b.com", "123",
+                "ACC1", LocalDate.now(), new Address());
+        Purchase p = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), List.of());
+
+        p.addCustomer(c);
+
+        assertTrue(c.getPurchaseHistory().contains(p));
+    }
+
+    @Test
+    void removePurchase_clearsCustomerInPurchase() {
+        Customer c = new Customer("A", "B", "a@b.com", "123",
+                "ACC1", LocalDate.now(), new Address());
+        Purchase p = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), List.of());
+
+        c.addPurchase(p);
+        c.removePurchase(p);
+
+        assertNull(p.getCustomer());
+    }
+
+    @Test
+    void removeCustomer_removesPurchaseFromCustomerHistory() {
+        Customer c = new Customer("A", "B", "a@b.com", "123",
+                "ACC1", LocalDate.now(), new Address());
+        Purchase p = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), List.of());
+
+        p.addCustomer(c);
+        p.removeCustomer(c);
+
+        assertFalse(c.getPurchaseHistory().contains(p));
+    }
+
+    @Test
+    void addingSamePurchaseTwice_doesNotDuplicate() {
+        Customer c = new Customer("A", "B", "a@b.com", "123",
+                "ACC1", LocalDate.now(), new Address());
+        Purchase p = new Purchase(1, Purchase.PaymentMethod.CARD, LocalDate.now(), List.of());
+
+        c.addPurchase(p);
+        c.addPurchase(p);
+
+        assertEquals(1, c.getPurchaseHistory().size());
+    }
+
