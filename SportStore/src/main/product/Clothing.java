@@ -82,6 +82,11 @@ public class Clothing extends Product {
         return category;
     }
 
+    @Override
+    void removeFromExtent() {
+        extent.remove(this);
+    }
+
 
 
     public static void saveExtent(String fileName) {

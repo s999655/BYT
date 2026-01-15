@@ -9,6 +9,7 @@ public abstract class Product implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
+
     private int productID;
     private String name;
     private double price;
@@ -164,5 +165,25 @@ public abstract class Product implements Serializable{
         if (contains.remove(component)) {
             component.containedIn.remove(this);
         }
+    }
+
+    abstract void removeFromExtent();
+
+    public void delete() {
+        // Remove from brand if it was not already removed
+        if (this.brand != null) {
+            this.brand.removeProduct(this);
+            this.brand = null;
+        }
+        
+        for (Product parent : new ArrayList<>(containedIn)) {
+            parent.removeContainedProduct(this);
+        }
+        
+        for (Product component : new ArrayList<>(contains)) {
+            this.removeContainedProduct(component);
+        }
+
+        removeFromExtent();
     }
 }
