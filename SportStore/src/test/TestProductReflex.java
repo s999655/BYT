@@ -1,22 +1,34 @@
 package test;
 
+import main.product.Brand;
 import main.product.Product;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
-class TestProductReflex{
+class TestProductReflex {
 
     static class TestProduct extends Product {
-        public TestProduct(int id, String name) {
-            super(id, name, 100.0, 10, "model", "color", 50.0, "A1");
+
+        public TestProduct(int id, Brand brand, String name) {
+            super(id, brand, name, 100.0, 10, "model", "color", 50.0, "A1");
+        }
+
+        @Override
+        void removeFromExtent() {
+            // no extent tracking needed for this test
         }
     }
 
     @Test
     void addContainedProduct_updatesBothSides() {
-        Product kit = new TestProduct(1, "Kit");
-        Product item = new TestProduct(2, "Item");
+        Brand brand = new Brand("Test", LocalDate.of(2000, 1, 1));
+        Product kit = new TestProduct(1, brand, "Kit");
+        Product item = new TestProduct(2, brand, "Item");
 
         kit.addContainedProduct(item);
 
@@ -26,8 +38,9 @@ class TestProductReflex{
 
     @Test
     void removeContainedProduct_updatesBothSides() {
-        Product kit = new TestProduct(3, "Kit");
-        Product item = new TestProduct(4, "Item");
+        Brand brand = new Brand("Test", LocalDate.of(2000, 1, 1));
+        Product kit = new TestProduct(3, brand, "Kit");
+        Product item = new TestProduct(4, brand, "Item");
 
         kit.addContainedProduct(item);
         kit.removeContainedProduct(item);
@@ -38,8 +51,9 @@ class TestProductReflex{
 
     @Test
     void addContainedProduct_sameItemTwice_doesNotDuplicate() {
-        Product kit = new TestProduct(5, "Kit");
-        Product item = new TestProduct(6, "Item");
+        Brand brand = new Brand("Test", LocalDate.of(2000, 1, 1));
+        Product kit = new TestProduct(5, brand, "Kit");
+        Product item = new TestProduct(6, brand, "Item");
 
         kit.addContainedProduct(item);
         kit.addContainedProduct(item);
@@ -50,7 +64,8 @@ class TestProductReflex{
 
     @Test
     void addContainedProduct_self_throwsException() {
-        Product kit = new TestProduct(7, "SelfKit");
+        Brand brand = new Brand("Test", LocalDate.of(2000, 1, 1));
+        Product kit = new TestProduct(7, brand, "SelfKit");
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -62,15 +77,14 @@ class TestProductReflex{
 
     @Test
     void gettersReturnUnmodifiableLists_encapsulation() {
-        Product kit = new TestProduct(8, "Kit");
-        Product item = new TestProduct(9, "Item");
+        Brand brand = new Brand("Test", LocalDate.of(2000, 1, 1));
+        Product kit = new TestProduct(8, brand, "Kit");
+        Product item = new TestProduct(9, brand, "Item");
 
         kit.addContainedProduct(item);
 
         List<Product> contains = kit.getContains();
         List<Product> containedIn = item.getContainedIn();
 
-        assertThrows(UnsupportedOperationException.class, () -> contains.add(new TestProduct(10, "X")));
-        assertThrows(UnsupportedOperationException.class, () -> containedIn.clear());
-    }
-}
+        assertThrows(UnsupportedOperationException.class,
+                () -> contains.add(new TestProduct(10, brand, "X")));
