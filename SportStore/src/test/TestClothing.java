@@ -124,15 +124,15 @@ public class TestClothing {
         String[] materials1 = {"cotton"};
         String[] materials2 = {"wool"};
 
-        // Clear extent before test
-        Clothing.loadExtent("non_existing_file.xml"); // resets extent
+
+        Clothing.loadExtent("non_existing_file.xml"); 
 
         Clothing c1 = new Clothing(10, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Shirt1", 20.0, 5, "S1", "Red", 10.0, "A1", materials1, Clothing.Size.M, Clothing.Category.men);
         Clothing c2 = new Clothing(11, new Brand("TestBrand", java.time.LocalDate.of(2000,1,1)), "Jacket1", 50.0, 2, "J1", "Black", 30.0, "B2", materials2, Clothing.Size.L, Clothing.Category.women);
 
         Clothing.saveExtent(TEST_FILE);
 
-        // reset extent and load from file
+      
         Clothing.loadExtent(TEST_FILE);
         var extent = Clothing.getExtent();
 
@@ -140,7 +140,31 @@ public class TestClothing {
         assertEquals(10, extent.get(0).getProductID());
         assertEquals(11, extent.get(1).getProductID());
 
-        // clean up test file
+   
         new File(TEST_FILE).delete();
     }
+@Test
+void testRemoveProductDeletesProduct() {
+    Brand brand = new Brand("Nike", java.time.LocalDate.of(1964, 1, 1));
+
+    Clothing clothing = new Clothing(
+        200,
+        brand,
+        "Shoes",
+        300,
+        5,
+        "Air",
+        "Black",
+        200,
+        "A2",
+        new String[]{"leather"},
+        Clothing.Size.L,
+        Clothing.Category.men
+    );
+
+
+    brand.removeProduct(clothing);
+
+    assertTrue(brand.getProducts().isEmpty());
 }
+
