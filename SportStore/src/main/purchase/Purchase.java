@@ -156,4 +156,25 @@ public class Purchase implements Serializable{
         return customer;
     }
 
+    //Association class
+    private final List<ProductsQuantityInPurchase> items = new ArrayList<>();
+
+    public List<ProductsQuantityInPurchase> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+
+    public void addProduct(Product product, int quantity) {
+        if (product == null) throw new IllegalArgumentException("Product cannot be null");
+        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
+    
+        items.add(new ProductsQuantityInPurchase(this, product, quantity));
+    }
+
+    public void removeProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+    
+        items.removeIf(line -> line.getProduct() == product);
+    }
 }
